@@ -1,5 +1,5 @@
 /* Global Variables */
-const API_KEY = `cd21e1cbebc020db230d35b16e0cf2b3`;
+const API_KEY = `cd21e1cbebc020db230d35b16e0cf2b3&units=metric`;
 let API_URL =`https://api.openweathermap.org/data/2.5/weather?zip=90001,us&appid=${API_KEY}`;
  
 
@@ -33,19 +33,21 @@ const retrieveData = async (url='') =>{
     const zip_code =  document.getElementById('zip').value;  
     const content = document.getElementById('feelings').value;
     API_URL = `https://api.openweathermap.org/data/2.5/weather?zip=${zip_code},us&appid=${API_KEY}`;
-   
+   try{
     retrieveData(API_URL)
     .then(function(data){
       // Add data
       // console.log(data.main.temp);
      postData('/add', {temperature: data.main.temp, date: date, content: content} );
     })
-    .then(
-      updateUI()
-    ).catch(function(error) {
+    .then(()=>{
+      updateUI();
+    });
+  }
+    catch(error){
       console.log(error);
       alert('The zip code is wrong. Please try again');
-  });
+  }
   // userInfo.reset();  b3den
 }
 // Async POST
@@ -80,7 +82,7 @@ const postData = async ( url = '', data = {})=>{
       const allData = await request.json();
       
       // console.log(allData);
-      document.getElementById('date').innerHTML = (allData.temp-273).toFixed(2)+ " C";
+      document.getElementById('date').innerHTML = allData.temp.toFixed(2)+ " C";
       document.getElementById('temp').innerHTML = allData.date ;
       document.getElementById('content').innerHTML = allData.content;
   
