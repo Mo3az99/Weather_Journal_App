@@ -1,7 +1,6 @@
 // Setup empty JS object to act as endpoint for all routes
 projectData = {};
 
-let req_id = 0 ;
 // Require Express to run server and routes
 
 /* Express to run server and routes */
@@ -51,10 +50,5 @@ function callBack(req,res){
     projectData['date'] = req.body.date;
     projectData['content'] = req.body.content;
     res.send(projectData);
-    // console.log(req_id);
-    // Object.assign(projectData, req.body);
-    // console.log(
-    //  `id ${req_id++} temperature : ${projectData.temperature} date: ${projectData.date} userResponse: ${projectData.userResponse}`
-    // );
-//   console.log(projectData);
+
 }

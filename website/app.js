@@ -5,8 +5,8 @@ let API_URL =`https://api.openweathermap.org/data/2.5/weather?zip=90001,us&appid
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let date = d.getMonth()+1+'.'+ d.getDate()+'.'+ d.getFullYear();
-// const userInfo = document.getElementById('userInfo');
+let date = d.getMonth()+1+'/'+ d.getDate()+'/'+ d.getFullYear();
+// const userInfo = document.getElementById('userInfo'); b3den
 
 
 
@@ -25,7 +25,6 @@ const retrieveData = async (url='') =>{
       console.log("error", error);
       // appropriately handle the error
     }
-
   };
 
 
@@ -34,7 +33,6 @@ const retrieveData = async (url='') =>{
     const zip_code =  document.getElementById('zip').value;  
     const content = document.getElementById('feelings').value;
     API_URL = `https://api.openweathermap.org/data/2.5/weather?zip=${zip_code},us&appid=${API_KEY}`;
-    // const favFact =  document.getElementById('favorite').value;
    
     retrieveData(API_URL)
     .then(function(data){
@@ -48,7 +46,7 @@ const retrieveData = async (url='') =>{
       console.log(error);
       alert('The zip code is wrong. Please try again');
   });
-  // userInfo.reset();
+  // userInfo.reset();  b3den
 }
 // Async POST
 const postData = async ( url = '', data = {})=>{
