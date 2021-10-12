@@ -1,11 +1,16 @@
 /* Global Variables */
 const API_KEY = `cd21e1cbebc020db230d35b16e0cf2b3`;
 let API_URL =`https://api.openweathermap.org/data/2.5/weather?zip=90001,us&appid=${API_KEY}`;
-let zip_code =  document.getElementById('zip').value;   
+ 
 
 // Create a new date instance dynamically with JS
 let d = new Date();
-let newDate = d.getMonth()+1+'.'+ d.getDate()+'.'+ d.getFullYear();
+let date = d.getMonth()+1+'.'+ d.getDate()+'.'+ d.getFullYear();
+const userInfo = document.getElementById('userInfo');
+
+
+
+document.getElementById('generate').addEventListener('click', performAction);
 
 
 // Async GET
@@ -13,7 +18,8 @@ const retrieveData = async (url='') =>{
     const request = await fetch(url);
     try {
     // Transform into JSON
-    const allData = await request.json()
+    const allData = await request.json();
+    return allData; //return data
     }
     catch(error) {
       console.log("error", error);
@@ -22,24 +28,28 @@ const retrieveData = async (url='') =>{
 
   };
 
-  document.getElementById('generate').addEventListener('click', performAction);
+
 
   function performAction(e){
-   
+    const zip_code =  document.getElementById('zip').value;  
+    const content = document.getElementById('feelings').value;
     API_URL = `https://api.openweathermap.org/data/2.5/weather?zip=${zip_code},us&appid=${API_KEY}`;
     // const favFact =  document.getElementById('favorite').value;
    
     retrieveData(API_URL)
     .then(function(data){
       // Add data
-      console.log(data);
-     // postData('/add', {temperature:data.main.temp, date: data.date, user_response:user_response} );
+      // console.log(data.main.temp);
+     postData('/add', {temperature: data.main.temp, date: date, content: content} );
     })
     .then(
       updateUI()
-    )
-  }
-
+    ).catch(function(error) {
+      console.log(error);
+      alert('The zip code is wrong. Please try again');
+  });
+  // userInfo.reset();
+}
 // Async POST
 const postData = async ( url = '', data = {})=>{
 
@@ -48,8 +58,12 @@ const postData = async ( url = '', data = {})=>{
     credentials: 'same-origin', 
     headers: {
         'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data), // body data type must match "Content-Type" header        
+    },// body data type must match "Content-Type" header    
+    body: JSON.stringify({
+      temp: data.temperature,
+      date: data.date,
+      content: data.content
+  })     
   });
 
     try {
@@ -63,12 +77,14 @@ const postData = async ( url = '', data = {})=>{
 
 
   const updateUI = async () => {
-    const request = await fetch('/receive');
+    const request = await fetch('/all');
     try{
       const allData = await request.json();
-      document.getElementById('date').innerHTML = allData[0].temperature;
-      document.getElementById('temp').innerHTML = allData[0].date;
-      document.getElementById('content').innerHTML = allData[0].user_response;
+      
+      // console.log(allData);
+      document.getElementById('date').innerHTML = (allData.temp-273).toFixed(2)+ " C";
+      document.getElementById('temp').innerHTML = allData.date ;
+      document.getElementById('content').innerHTML = allData.content;
   
     }catch(error){
       console.log("error", error);

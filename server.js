@@ -37,9 +37,9 @@ const server = app.listen(port, listening);
 
 
 // GET route
-app.get('/receive', sendData);
+app.get('/all', getData);
 
-function sendData (request, response) {
+function getData (request, response) {
   response.send(projectData);
 };
 
@@ -47,10 +47,14 @@ function sendData (request, response) {
 app.post('/add', callBack);
 
 function callBack(req,res){
-    console.log(req_id);
-    Object.assign(projectData, req.body);
-    console.log(
-     `id ${req_id++} temperature : ${projectData.temperature} date: ${projectData.date} userResponse: ${projectData.userResponse}`
-    );
+    projectData['temp'] = req.body.temp;
+    projectData['date'] = req.body.date;
+    projectData['content'] = req.body.content;
+    res.send(projectData);
+    // console.log(req_id);
+    // Object.assign(projectData, req.body);
+    // console.log(
+    //  `id ${req_id++} temperature : ${projectData.temperature} date: ${projectData.date} userResponse: ${projectData.userResponse}`
+    // );
 //   console.log(projectData);
 }
